@@ -53,11 +53,23 @@ export async function httpRequest(path, options = {}) {
     requestHeaders["Content-Type"] = "application/json";
   }
 
-  const response = await fetch(buildApiUrl(path), {
-    method: upperMethod,
-    headers: requestHeaders,
-    body: hasBody ? (isFormData ? data : JSON.stringify(data)) : undefined
-  });
+  const requestUrl = buildApiUrl(path);
+  let response;
+
+  try {
+    response = await fetch(requestUrl, {
+      method: upperMethod,
+      headers: requestHeaders,
+      body: hasBody ? (isFormData ? data : JSON.stringify(data)) : undefined
+    });
+  } catch (networkError) {
+    const error = new Error(
+      `No se pudo conectar con la API (${requestUrl}). Verifica red local, firewall y URL.`
+    );
+    error.status = 0;
+    error.cause = networkError;
+    throw error;
+  }
 
   if (responseType === "blob") {
     if (!response.ok) {

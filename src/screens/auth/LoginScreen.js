@@ -9,6 +9,7 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { loginRequest } from "../../lib/services/authService";
 import { COLORS } from "../../theme/colors";
 import { API_URL } from "../../lib/config/env";
+import { httpRequest } from "../../lib/api/httpClient";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -22,6 +23,7 @@ export default function LoginScreen() {
   const [userToVerify, setUserToVerify] = useState(null);
   const [tokenToVerify, setTokenToVerify] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [testingApi, setTestingApi] = useState(false);
 
   const finishLogin = async () => {
     if (!userToVerify || !tokenToVerify) {
@@ -88,6 +90,25 @@ export default function LoginScreen() {
     }
   };
 
+  const handleApiTest = async () => {
+    setTestingApi(true);
+    try {
+      await httpRequest("/api/auth/login", {
+        method: "POST",
+        data: {}
+      });
+      Alert.alert("API OK", `La API responde en ${API_URL}`);
+    } catch (error) {
+      if (error?.status === 400 || error?.status === 401 || error?.status === 403) {
+        Alert.alert("API OK", `La API responde en ${API_URL}`);
+      } else {
+        Alert.alert("Sin conexion API", error.message || `No se pudo conectar a ${API_URL}`);
+      }
+    } finally {
+      setTestingApi(false);
+    }
+  };
+
   return (
     <ScreenLayout title="Mercapleno" subtitle="Accede a tu cuenta y administra ventas o compras.">
       <SectionCard style={styles.card}>
@@ -129,6 +150,9 @@ export default function LoginScreen() {
         </Pressable>
         <Pressable onPress={() => navigation.navigate("Registro")}>
           <Text style={styles.link}>Crear cuenta nueva</Text>
+        </Pressable>
+        <Pressable onPress={handleApiTest} disabled={testingApi}>
+          <Text style={styles.link}>{testingApi ? "Probando API..." : "Probar conexion API"}</Text>
         </Pressable>
         <Text style={styles.apiInfo}>API: {API_URL}</Text>
       </View>
