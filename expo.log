@@ -1,0 +1,14 @@
+env: load .env
+env: export EXPO_PUBLIC_API_URL
+Starting project at C:\Users\jefer\OneDrive\Escritorio\mercapleno-expo
+Starting Metro Bundler
+
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Android .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android .\index.js ▓▓▓▓▓░░░░░░░░░░░ 35.6% (357/604)
+Android .\index.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 79.1% ( 925/1040)
+Android .\index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1393/1394)
+Android Bundled 11096ms index.js (1404 modules)
+Android .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android Bundled 46ms index.js (1 module)
